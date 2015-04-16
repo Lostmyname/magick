@@ -93,6 +93,19 @@ Image *AddShadowToImage(Image *image, char *colorname, const double opacity,
   return image;
 }
 
+Image *ComposeSourceWithImage(Image *image, const CompositeOperator compose,
+    Image *source, const ssize_t x_offset, const ssize_t y_offset,
+    ExceptionInfo *exception)
+{
+  Image *new_image;
+  new_image = CloneImage(image, 0, 0, MagickTrue, exception);
+
+  if (CompositeImage(new_image, compose, source, x_offset, y_offset) == MagickFalse) {
+    return MagickFalse;
+  }
+  return new_image;
+}
+
 Image *FillBackgroundColor(Image *image, char *colorname, ExceptionInfo *exception)
 {
   Image *new_image;

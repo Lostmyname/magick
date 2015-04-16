@@ -48,6 +48,78 @@ type MagickError struct {
 	Description string
 }
 
+const (
+	UndefinedCompositeOp        = C.UndefinedCompositeOp
+	NoCompositeOp               = C.NoCompositeOp
+	ModulusAddCompositeOp       = C.ModulusAddCompositeOp
+	AtopCompositeOp             = C.AtopCompositeOp
+	BlendCompositeOp            = C.BlendCompositeOp
+	BumpmapCompositeOp          = C.BumpmapCompositeOp
+	ChangeMaskCompositeOp       = C.ChangeMaskCompositeOp
+	ClearCompositeOp            = C.ClearCompositeOp
+	ColorBurnCompositeOp        = C.ColorBurnCompositeOp
+	ColorDodgeCompositeOp       = C.ColorDodgeCompositeOp
+	ColorizeCompositeOp         = C.ColorizeCompositeOp
+	CopyBlackCompositeOp        = C.CopyBlackCompositeOp
+	CopyBlueCompositeOp         = C.CopyBlueCompositeOp
+	CopyCompositeOp             = C.CopyCompositeOp
+	CopyCyanCompositeOp         = C.CopyCyanCompositeOp
+	CopyGreenCompositeOp        = C.CopyGreenCompositeOp
+	CopyMagentaCompositeOp      = C.CopyMagentaCompositeOp
+	CopyOpacityCompositeOp      = C.CopyOpacityCompositeOp
+	CopyRedCompositeOp          = C.CopyRedCompositeOp
+	CopyYellowCompositeOp       = C.CopyYellowCompositeOp
+	DarkenCompositeOp           = C.DarkenCompositeOp
+	DstAtopCompositeOp          = C.DstAtopCompositeOp
+	DstCompositeOp              = C.DstCompositeOp
+	DstInCompositeOp            = C.DstInCompositeOp
+	DstOutCompositeOp           = C.DstOutCompositeOp
+	DstOverCompositeOp          = C.DstOverCompositeOp
+	DifferenceCompositeOp       = C.DifferenceCompositeOp
+	DisplaceCompositeOp         = C.DisplaceCompositeOp
+	DissolveCompositeOp         = C.DissolveCompositeOp
+	ExclusionCompositeOp        = C.ExclusionCompositeOp
+	HardLightCompositeOp        = C.HardLightCompositeOp
+	HueCompositeOp              = C.HueCompositeOp
+	InCompositeOp               = C.InCompositeOp
+	LightenCompositeOp          = C.LightenCompositeOp
+	LinearLightCompositeOp      = C.LinearLightCompositeOp
+	LuminizeCompositeOp         = C.LuminizeCompositeOp
+	MinusDstCompositeOp         = C.MinusDstCompositeOp
+	ModulateCompositeOp         = C.ModulateCompositeOp
+	MultiplyCompositeOp         = C.MultiplyCompositeOp
+	OutCompositeOp              = C.OutCompositeOp
+	OverCompositeOp             = C.OverCompositeOp
+	OverlayCompositeOp          = C.OverlayCompositeOp
+	PlusCompositeOp             = C.PlusCompositeOp
+	ReplaceCompositeOp          = C.ReplaceCompositeOp
+	SaturateCompositeOp         = C.SaturateCompositeOp
+	ScreenCompositeOp           = C.ScreenCompositeOp
+	SoftLightCompositeOp        = C.SoftLightCompositeOp
+	SrcAtopCompositeOp          = C.SrcAtopCompositeOp
+	SrcCompositeOp              = C.SrcCompositeOp
+	SrcInCompositeOp            = C.SrcInCompositeOp
+	SrcOutCompositeOp           = C.SrcOutCompositeOp
+	SrcOverCompositeOp          = C.SrcOverCompositeOp
+	ModulusSubtractCompositeOp  = C.ModulusSubtractCompositeOp
+	ThresholdCompositeOp        = C.ThresholdCompositeOp
+	XorCompositeOp              = C.XorCompositeOp
+	DivideDstCompositeOp        = C.DivideDstCompositeOp
+	DistortCompositeOp          = C.DistortCompositeOp
+	BlurCompositeOp             = C.BlurCompositeOp
+	PegtopLightCompositeOp      = C.PegtopLightCompositeOp
+	VividLightCompositeOp       = C.VividLightCompositeOp
+	PinLightCompositeOp         = C.PinLightCompositeOp
+	LinearDodgeCompositeOp      = C.LinearDodgeCompositeOp
+	LinearBurnCompositeOp       = C.LinearBurnCompositeOp
+	MathematicsCompositeOp      = C.MathematicsCompositeOp
+	DivideSrcCompositeOp        = C.DivideSrcCompositeOp
+	MinusSrcCompositeOp         = C.MinusSrcCompositeOp
+	DarkenIntensityCompositeOp  = C.DarkenIntensityCompositeOp
+	LightenIntensityCompositeOp = C.LightenIntensityCompositeOp
+	HardMixCompositeOp          = C.HardMixCompositeOp
+)
+
 func (err *MagickError) Error() string {
 	return "MagickError " + err.Severity + ": " + err.Reason + "- " + err.Description
 }
@@ -273,6 +345,24 @@ func (im *MagickImage) Shadow(color string, opacity, sigma float32, xoffset, yof
 	c_color := C.CString(color)
 	defer C.free(unsafe.Pointer(c_color))
 	new_image := C.AddShadowToImage(im.Image, c_color, c_opacity, c_sigma, c_x, c_y, exception)
+	if failed := C.CheckException(exception); failed == C.MagickTrue {
+		return ErrorFromExceptionInfo(exception)
+	}
+	im.ReplaceImage(new_image)
+	return nil
+}
+
+// Compose composites a supplied image on top of the current image using the
+// specified composite method, at the specified offset.
+func (im *MagickImage) Compose(compose int, source *MagickImage, xoffset, yoffset int) (err error) {
+	exception := C.AcquireExceptionInfo()
+	defer C.DestroyExceptionInfo(exception)
+
+	c_x := (C.ssize_t)(xoffset)
+	c_y := (C.ssize_t)(yoffset)
+
+	new_image := C.ComposeSourceWithImage(im.Image, (C.CompositeOperator)(compose), source.Image, c_x, c_y, exception)
+
 	if failed := C.CheckException(exception); failed == C.MagickTrue {
 		return ErrorFromExceptionInfo(exception)
 	}

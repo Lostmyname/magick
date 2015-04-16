@@ -8,13 +8,22 @@ import (
 	"testing"
 )
 
-func setupImage(t *testing.T) (image *MagickImage) {
-	filename := "test/heart_original.png"
+func loadImage(t *testing.T, filename string) (image *MagickImage) {
 	image, error := NewFromFile(filename)
 	assert.T(t, error == nil)
 	assert.T(t, image != nil)
 	assert.T(t, image.Image != nil)
 	assert.T(t, image.ImageInfo != nil)
+	return
+}
+
+func setupImage(t *testing.T) (image *MagickImage) {
+	image = loadImage(t, "test/heart_original.png")
+	return
+}
+
+func setupBackgroundImage(t *testing.T) (image *MagickImage) {
+	image = loadImage(t, "test/blue_background.png")
 	return
 }
 
@@ -173,6 +182,23 @@ func TestCrop(t *testing.T) {
 func TestShadow(t *testing.T) {
 	image := setupImage(t)
 	err := image.Shadow("#000", 75, 2, 0, 0)
+	assert.T(t, err == nil)
+}
+
+func TestCompose(t *testing.T) {
+	image := setupBackgroundImage(t)
+	overlay := setupImage(t)
+
+	assert.T(t, image.Width() == overlay.Width())
+	assert.T(t, image.Height() == overlay.Height())
+
+	err := image.Compose(ScreenCompositeOp, overlay, 150, 150)
+	assert.T(t, err == nil)
+	assert.T(t, image != nil)
+
+	filename := "test/test_compose.png"
+	os.Remove(filename)
+	err = image.ToFile(filename)
 	assert.T(t, err == nil)
 }
 
