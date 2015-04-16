@@ -49,75 +49,75 @@ type MagickError struct {
 }
 
 const (
-	UndefinedCompositeOp        = C.UndefinedCompositeOp
-	NoCompositeOp               = C.NoCompositeOp
-	ModulusAddCompositeOp       = C.ModulusAddCompositeOp
-	AtopCompositeOp             = C.AtopCompositeOp
-	BlendCompositeOp            = C.BlendCompositeOp
-	BumpmapCompositeOp          = C.BumpmapCompositeOp
-	ChangeMaskCompositeOp       = C.ChangeMaskCompositeOp
-	ClearCompositeOp            = C.ClearCompositeOp
-	ColorBurnCompositeOp        = C.ColorBurnCompositeOp
-	ColorDodgeCompositeOp       = C.ColorDodgeCompositeOp
-	ColorizeCompositeOp         = C.ColorizeCompositeOp
-	CopyBlackCompositeOp        = C.CopyBlackCompositeOp
-	CopyBlueCompositeOp         = C.CopyBlueCompositeOp
-	CopyCompositeOp             = C.CopyCompositeOp
-	CopyCyanCompositeOp         = C.CopyCyanCompositeOp
-	CopyGreenCompositeOp        = C.CopyGreenCompositeOp
-	CopyMagentaCompositeOp      = C.CopyMagentaCompositeOp
-	CopyOpacityCompositeOp      = C.CopyOpacityCompositeOp
-	CopyRedCompositeOp          = C.CopyRedCompositeOp
-	CopyYellowCompositeOp       = C.CopyYellowCompositeOp
-	DarkenCompositeOp           = C.DarkenCompositeOp
-	DstAtopCompositeOp          = C.DstAtopCompositeOp
-	DstCompositeOp              = C.DstCompositeOp
-	DstInCompositeOp            = C.DstInCompositeOp
-	DstOutCompositeOp           = C.DstOutCompositeOp
-	DstOverCompositeOp          = C.DstOverCompositeOp
-	DifferenceCompositeOp       = C.DifferenceCompositeOp
-	DisplaceCompositeOp         = C.DisplaceCompositeOp
-	DissolveCompositeOp         = C.DissolveCompositeOp
-	ExclusionCompositeOp        = C.ExclusionCompositeOp
-	HardLightCompositeOp        = C.HardLightCompositeOp
-	HueCompositeOp              = C.HueCompositeOp
-	InCompositeOp               = C.InCompositeOp
-	LightenCompositeOp          = C.LightenCompositeOp
-	LinearLightCompositeOp      = C.LinearLightCompositeOp
-	LuminizeCompositeOp         = C.LuminizeCompositeOp
-	MinusDstCompositeOp         = C.MinusDstCompositeOp
-	ModulateCompositeOp         = C.ModulateCompositeOp
-	MultiplyCompositeOp         = C.MultiplyCompositeOp
-	OutCompositeOp              = C.OutCompositeOp
-	OverCompositeOp             = C.OverCompositeOp
-	OverlayCompositeOp          = C.OverlayCompositeOp
-	PlusCompositeOp             = C.PlusCompositeOp
-	ReplaceCompositeOp          = C.ReplaceCompositeOp
-	SaturateCompositeOp         = C.SaturateCompositeOp
-	ScreenCompositeOp           = C.ScreenCompositeOp
-	SoftLightCompositeOp        = C.SoftLightCompositeOp
-	SrcAtopCompositeOp          = C.SrcAtopCompositeOp
-	SrcCompositeOp              = C.SrcCompositeOp
-	SrcInCompositeOp            = C.SrcInCompositeOp
-	SrcOutCompositeOp           = C.SrcOutCompositeOp
-	SrcOverCompositeOp          = C.SrcOverCompositeOp
-	ModulusSubtractCompositeOp  = C.ModulusSubtractCompositeOp
-	ThresholdCompositeOp        = C.ThresholdCompositeOp
-	XorCompositeOp              = C.XorCompositeOp
-	DivideDstCompositeOp        = C.DivideDstCompositeOp
-	DistortCompositeOp          = C.DistortCompositeOp
-	BlurCompositeOp             = C.BlurCompositeOp
-	PegtopLightCompositeOp      = C.PegtopLightCompositeOp
-	VividLightCompositeOp       = C.VividLightCompositeOp
-	PinLightCompositeOp         = C.PinLightCompositeOp
-	LinearDodgeCompositeOp      = C.LinearDodgeCompositeOp
-	LinearBurnCompositeOp       = C.LinearBurnCompositeOp
-	MathematicsCompositeOp      = C.MathematicsCompositeOp
-	DivideSrcCompositeOp        = C.DivideSrcCompositeOp
-	MinusSrcCompositeOp         = C.MinusSrcCompositeOp
-	DarkenIntensityCompositeOp  = C.DarkenIntensityCompositeOp
-	LightenIntensityCompositeOp = C.LightenIntensityCompositeOp
-	HardMixCompositeOp          = C.HardMixCompositeOp
+	UndefinedCompositeOp = iota
+	NoCompositeOp
+	ModulusAddCompositeOp
+	AtopCompositeOp
+	BlendCompositeOp
+	BumpmapCompositeOp
+	ChangeMaskCompositeOp
+	ClearCompositeOp
+	ColorBurnCompositeOp
+	ColorDodgeCompositeOp
+	ColorizeCompositeOp
+	CopyBlackCompositeOp
+	CopyBlueCompositeOp
+	CopyCompositeOp
+	CopyCyanCompositeOp
+	CopyGreenCompositeOp
+	CopyMagentaCompositeOp
+	CopyOpacityCompositeOp
+	CopyRedCompositeOp
+	CopyYellowCompositeOp
+	DarkenCompositeOp
+	DstAtopCompositeOp
+	DstCompositeOp
+	DstInCompositeOp
+	DstOutCompositeOp
+	DstOverCompositeOp
+	DifferenceCompositeOp
+	DisplaceCompositeOp
+	DissolveCompositeOp
+	ExclusionCompositeOp
+	HardLightCompositeOp
+	HueCompositeOp
+	InCompositeOp
+	LightenCompositeOp
+	LinearLightCompositeOp
+	LuminizeCompositeOp
+	MinusDstCompositeOp
+	ModulateCompositeOp
+	MultiplyCompositeOp
+	OutCompositeOp
+	OverCompositeOp
+	OverlayCompositeOp
+	PlusCompositeOp
+	ReplaceCompositeOp
+	SaturateCompositeOp
+	ScreenCompositeOp
+	SoftLightCompositeOp
+	SrcAtopCompositeOp
+	SrcCompositeOp
+	SrcInCompositeOp
+	SrcOutCompositeOp
+	SrcOverCompositeOp
+	ModulusSubtractCompositeOp
+	ThresholdCompositeOp
+	XorCompositeOp
+	DivideDstCompositeOp
+	DistortCompositeOp
+	BlurCompositeOp
+	PegtopLightCompositeOp
+	VividLightCompositeOp
+	PinLightCompositeOp
+	LinearDodgeCompositeOp
+	LinearBurnCompositeOp
+	MathematicsCompositeOp
+	DivideSrcCompositeOp
+	MinusSrcCompositeOp
+	DarkenIntensityCompositeOp
+	LightenIntensityCompositeOp
+	HardMixCompositeOp
 )
 
 func (err *MagickError) Error() string {
