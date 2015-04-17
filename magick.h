@@ -4,6 +4,8 @@
 #include <assert.h>
 #include <magick/MagickCore.h>
 
+#define NullMagickImage NULL
+
 void SetImageInfoFilename(ImageInfo *image_info, char *filename)
 {
   (void) CopyMagickString(image_info->filename,filename,MaxTextExtent);
@@ -81,12 +83,12 @@ Image *AddShadowToImage(Image *image, char *colorname, const double opacity,
 
   Image *shadow_image;
   if (QueryColorDatabase(colorname, &image->background_color, exception) == MagickFalse) {
-    return MagickFalse;
+    return NullMagickImage;
   }
   shadow_image = ShadowImage(image, opacity, sigma, x_offset, y_offset, exception);
   AppendImageToList(&shadow_image, image);
   if (QueryColorDatabase("none", &shadow_image->background_color, exception) == MagickFalse) {
-    return MagickFalse;
+    return NullMagickImage;
   }
   image = MergeImageLayers(shadow_image, MergeLayer, exception);
   DestroyImage(shadow_image);
@@ -101,7 +103,7 @@ Image *ComposeSourceWithImage(Image *image, const CompositeOperator compose,
   new_image = CloneImage(image, 0, 0, MagickTrue, exception);
 
   if (CompositeImage(new_image, compose, source, x_offset, y_offset) == MagickFalse) {
-    return MagickFalse;
+    return NullMagickImage;
   }
   return new_image;
 }
@@ -111,10 +113,10 @@ Image *FillBackgroundColor(Image *image, char *colorname, ExceptionInfo *excepti
   Image *new_image;
   new_image = CloneImage(image, 0, 0, MagickTrue, exception);
   if (QueryColorDatabase(colorname, &image->background_color, exception) == MagickFalse) {
-    return MagickFalse;
+    return NullMagickImage;
   }
   if (SetImageBackgroundColor(image) == MagickFalse) {
-    return MagickFalse;
+    return NullMagickImage;
   }
   AppendImageToList(&image, new_image);
   image = MergeImageLayers(image, MergeLayer, exception);
@@ -126,7 +128,7 @@ Image *SeparateAlphaChannel(Image *image, ExceptionInfo *exception){
   Image *new_image;
   new_image = CloneImage(image, 0, 0, MagickTrue, exception);
   if (SeparateImageChannel(new_image, 0x0008) == MagickFalse){
-    return MagickFalse;
+    return NullMagickImage;
   }
   return new_image;
 }
@@ -135,7 +137,7 @@ Image *Negate(Image *image, ExceptionInfo *exception){
   Image *new_image;
   new_image = CloneImage(image, 0, 0, MagickTrue, exception);
   if (NegateImage(new_image, MagickTrue) == MagickFalse){
-    return MagickFalse;
+    return NullMagickImage;
   }
   return new_image;
 }
