@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/quirkey/magick"
+	"github.com/Lostmyname/magick"
 	"io/ioutil"
 	"log"
 	"os"

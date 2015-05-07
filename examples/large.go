@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/quirkey/magick"
+	"github.com/Lostmyname/magick"
 	"io/ioutil"
 	"log"
 	"os"
