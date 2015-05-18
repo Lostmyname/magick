@@ -215,6 +215,32 @@ func (im *MagickImage) ReplaceImage(new_image *C.Image) {
 	im.Image = new_image
 }
 
+// Splits a MagickImage holding a reference to a list of images into separate
+// MagickImage instances. The caller is responsible for invoking Destroy() on
+// each of the returned items.
+func (im *MagickImage) SplitList() ([]*MagickImage) {
+	images := make([]*MagickImage, im.ListLength())
+	images[0] = im
+
+	for i := 1; i < im.ListLength(); i++ {
+		tile := C.GetImageFromList(im.Image, (C.ssize_t)(i))
+		images[i] = &MagickImage{ Image: tile, ImageInfo: im.ImageInfo }
+	}
+
+	for _, image := range images {
+		image.Image.next = nil
+		image.Image.previous = nil
+	}
+
+	return images
+}
+
+// ListLength returns the number of images in the current list (such as might
+// be returned by CropToTiles()
+func (im *MagickImage) ListLength() (int) {
+	return (int)(C.GetImageListLength(im.Image))
+}
+
 // Width returns the Width of the loaded image in pixels as an int
 func (im *MagickImage) Width() int {
 	return (int)(im.Image.columns)
@@ -326,6 +352,19 @@ func (im *MagickImage) Crop(geometry string) (err error) {
 		return err
 	}
 	new_image := C.CropImage(im.Image, &rect, exception)
+	if failed := C.CheckException(exception); failed == C.MagickTrue {
+		return ErrorFromExceptionInfo(exception)
+	}
+	im.ReplaceImage(new_image)
+	return nil
+}
+
+func (im *MagickImage) CropToTiles(geometry string) (err error) {
+	exception := C.AcquireExceptionInfo()
+	defer C.DestroyExceptionInfo(exception)
+	c_geometry := C.CString(geometry)
+	defer C.free(unsafe.Pointer(c_geometry))
+	new_image := C.CropImageToTiles(im.Image, c_geometry, exception)
 	if failed := C.CheckException(exception); failed == C.MagickTrue {
 		return ErrorFromExceptionInfo(exception)
 	}

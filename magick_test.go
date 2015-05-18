@@ -268,6 +268,32 @@ func TestSetProperty(t *testing.T) {
 	assert.Equal(t, "4:4:4", factor)
 }
 
+func TestCropToTiles(t *testing.T) {
+	image := setupImage(t)
+	defer image.Destroy()
+
+	err := image.CropToTiles("25%x100%")
+
+	assert.Equal(t, err, nil)
+	assert.Equal(t, image.ListLength(), 4)
+}
+
+func TestSplitList(t *testing.T) {
+	image := setupImage(t)
+	defer image.Destroy()
+
+	err := image.CropToTiles("25%x100%")
+
+	assert.Equal(t, err, nil)
+
+	images := image.SplitList()
+
+	assert.Equal(t, len(images), 4)
+	for _, im := range images {
+		assert.Equal(t, im.ListLength(), 1)
+	}
+}
+
 func TestFullStack(t *testing.T) {
 	var err error
 	var filename string
