@@ -218,13 +218,16 @@ func (im *MagickImage) ReplaceImage(new_image *C.Image) {
 // Splits a MagickImage holding a reference to a list of images into separate
 // MagickImage instances. The caller is responsible for invoking Destroy() on
 // each of the returned items.
-func (im *MagickImage) SplitList() ([]*MagickImage) {
+func (im *MagickImage) SplitList() []*MagickImage {
 	images := make([]*MagickImage, im.ListLength())
 	images[0] = im
+	originalInfo := im.ImageInfo
 
 	for i := 1; i < im.ListLength(); i++ {
+		clonedInfo := C.CloneImageInfo(originalInfo)
+
 		tile := C.GetImageFromList(im.Image, (C.ssize_t)(i))
-		images[i] = &MagickImage{ Image: tile, ImageInfo: im.ImageInfo }
+		images[i] = &MagickImage{Image: tile, ImageInfo: clonedInfo}
 	}
 
 	for _, image := range images {
@@ -237,7 +240,7 @@ func (im *MagickImage) SplitList() ([]*MagickImage) {
 
 // ListLength returns the number of images in the current list (such as might
 // be returned by CropToTiles()
-func (im *MagickImage) ListLength() (int) {
+func (im *MagickImage) ListLength() int {
 	return (int)(C.GetImageListLength(im.Image))
 }
 
