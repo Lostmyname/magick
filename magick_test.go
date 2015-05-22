@@ -286,7 +286,8 @@ func TestSplitList(t *testing.T) {
 
 	assert.Equal(t, err, nil)
 
-	images := image.SplitList()
+	images, err := image.SplitList()
+	assert.Equal(t, err, nil)
 	for _, im := range images {
 		defer im.Destroy()
 	}

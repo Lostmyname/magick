@@ -218,7 +218,7 @@ func (im *MagickImage) ReplaceImage(new_image *C.Image) {
 // Splits a MagickImage holding a reference to a list of images into separate
 // MagickImage instances. The caller is responsible for invoking Destroy() on
 // each of the returned items.
-func (im *MagickImage) SplitList() []*MagickImage {
+func (im *MagickImage) SplitList() ([]*MagickImage, error) {
 	images := make([]*MagickImage, im.ListLength())
 	images[0] = im
 	originalInfo := im.ImageInfo
@@ -235,7 +235,8 @@ func (im *MagickImage) SplitList() []*MagickImage {
 		image.Image.previous = nil
 	}
 
-	return images
+	// TODO err, error handling?
+	return images, nil
 }
 
 // ListLength returns the number of images in the current list (such as might
