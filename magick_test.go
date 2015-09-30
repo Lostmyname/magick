@@ -8,6 +8,14 @@ import (
 	"testing"
 )
 
+func BenchmarkNewFromBlob(b *testing.B) {
+	for n := 0; n < b.N; n++ {
+		filename := "big.jpg"
+		source, _ := ioutil.ReadFile(filename)
+		NewFromBlob(source, "jpg")
+	}
+}
+
 func loadImage(t *testing.T, filename string) (image *MagickImage) {
 	image, error := NewFromFile(filename)
 	assert.T(t, error == nil)
